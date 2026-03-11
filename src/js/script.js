@@ -62,9 +62,9 @@ function init() {
     createStars();
     
     // Event Listeners
-    el.startBtn.addEventListener('click', startTimer);
-    el.pauseBtn.addEventListener('click', pauseTimer);
-    el.resetBtn.addEventListener('click', resetTimer);
+    el.startBtn.addEventListener('click', () => { playButtonSound(); startTimer(); });
+    el.pauseBtn.addEventListener('click', () => { playButtonSound(); pauseTimer(); });
+    el.resetBtn.addEventListener('click', () => { playButtonSound(); resetTimer(); });
     
     // Developer tool to fast forward time
     window.fastForward = () => { if(state.isActive) { state.timeLeft = 2; } };
@@ -260,6 +260,15 @@ function triggerConfetti() {
             if (Date.now() < end) requestAnimationFrame(frame);
         }());
     }
+}
+
+// --- Audio Elements ---
+const buttonSound = new Audio('assets/sounds/buttonClickSound.mp3');
+buttonSound.volume = 0.5;
+
+function playButtonSound() {
+    buttonSound.currentTime = 0;
+    buttonSound.play().catch(e => console.warn('Audio play prevented:', e));
 }
 
 function playNotificationSound() {

@@ -1,0 +1,352 @@
+================================================================================
+                   HELLO KITTY STUDY TIMER - CURRENT PROJECT
+                         Project Reference Document
+                      Last Updated: 10th March 2026
+================================================================================
+
+1. PROJECT OVERVIEW
+================================================================================
+
+    Project Name    :  Hello Kitty Study Timer
+    Type            :  Web-based Pomodoro Study Timer
+    Theme           :  Cute, cozy, Hello Kitty aesthetic
+    Tech Stack      :  Vanilla HTML, CSS, JavaScript (no frameworks)
+    Deployment      :  GitHub Pages (from /docs folder)
+    Repository      :  GitHub — branch "main"
+    Root Directory  :  d:\Projects\HelloKitty\
+
+    This is a Pomodoro technique timer with 25-minute study sessions,
+    5-minute short breaks, and 15-minute long breaks (after every 4 sessions).
+    The UI features a pastel pink color palette, floating star animations,
+    confetti celebrations, a Hello Kitty mascot, and strawberry session tracking.
+
+
+2. COMPLETE FILE TREE
+================================================================================
+
+    d:\Projects\HelloKitty\
+    │
+    ├── .gitignore                          (0.1 KB)  Git ignore rules
+    ├── README.md                           (2.4 KB)  GitHub repo readme with deploy instructions
+    ├── KittyTimer.html                     (879 KB)  Self-contained shareable single-file app
+    ├── Design Specification.txt            (2.3 KB)  Original design requirements document
+    ├── Technical Prerequisites.txt         (2.3 KB)  Original technical requirements document
+    ├── workflow.txt                        (3.7 KB)  Animated workflow/user journey document
+    ├── CurrentProject.txt                  (THIS FILE)
+    │
+    ├── src\                                DEVELOPMENT SOURCE (primary working copy)
+    │   ├── index.html                      (3.3 KB)  Main HTML layout
+    │   ├── css\
+    │   │   └── styles.css                  (6.9 KB)  All styling, animations, keyframes
+    │   ├── js\
+    │   │   └── script.js                   (9.1 KB)  Timer logic, state machine, effects
+    │   └── assets\
+    │       ├── images\
+    │       │   ├── kitty_study.png          (161 KB)  Mascot: studying with glasses & book
+    │       │   ├── kitty_tea.png            (125 KB)  Mascot: relaxing with teacup (break mode)
+    │       │   └── kitty_head.png           (74 KB)   Header icon: Hello Kitty face
+    │       └── sounds\
+    │           └── buttonClickSound.mp3     (6 KB)    Sound effect: played on Pause/Reset/Start
+    │
+    ├── docs\                               GITHUB PAGES DEPLOYMENT (mirrors src/)
+    │   ├── index.html                      (3.3 KB)  Same as src/index.html
+    │   ├── css\
+    │   │   └── styles.css                  (6.9 KB)  Same as src/css/styles.css
+    │   ├── js\
+    │   │   └── script.js                   (9.1 KB)  Same as src/js/script.js
+    │   └── assets\
+    │       ├── images\
+    │       │   ├── kitty_study.png          (161 KB)
+    │       │   ├── kitty_tea.png            (125 KB)
+    │       │   └── kitty_head.png           (74 KB)
+    │       └── sounds\
+    │           └── buttonClickSound.mp3     (6 KB)
+    │
+    ├── pwa\                                PROGRESSIVE WEB APP VERSION (Android-installable)
+    │   ├── index.html                      (4.3 KB)  Enhanced with PWA meta tags & SW registration
+    │   ├── manifest.json                   (0.6 KB)  PWA manifest (app name, icon, theme)
+    │   ├── service-worker.js               (2.2 KB)  Offline caching for all assets
+    │   ├── build-single-file.ps1           (3.6 KB)  PowerShell script to generate KittyTimer.html
+    │   ├── css\
+    │   │   └── styles.css                  (6.9 KB)
+    │   ├── js\
+    │   │   └── script.js                   (9.1 KB)
+    │   └── assets\
+    │       ├── icons\
+    │       │   └── icon-512.png            (358 KB)  Generated app icon for Android home screen
+    │       ├── images\
+    │       │   ├── kitty_study.png          (161 KB)
+    │       │   ├── kitty_tea.png            (125 KB)
+    │       │   └── kitty_head.png           (74 KB)
+    │       └── sounds\
+    │           └── buttonClickSound.mp3     (6 KB)
+    │
+    └── design\                             (Empty — reserved for future design assets)
+
+
+3. FILE DESCRIPTIONS (DETAILED)
+================================================================================
+
+--- REQUIREMENT DOCUMENTS ---
+
+    Design Specification.txt
+        Contains the original design requirements:
+        - Color palette: Soft Pink #FFB6C1, Light Cream #FFF5F7, Pastel Red #FF6B81
+        - Typography: Nunito / Poppins / Fredoka (rounded & playful)
+        - Layout: Header → Center Timer → Footer Controls
+        - Visual elements: Hearts, bows, pill-shaped buttons, rounded cards
+        - Animation guidelines: 300ms–800ms, gentle bounces, floating hearts
+        - Button states: Normal, Hover (glow), Pressed
+        - Session-end feedback: Confetti hearts + cute popup message
+
+    Technical Prerequisites.txt
+        Contains the technical requirements:
+        - Pomodoro cycle: 25 min study → 5 min short break → repeat 4x → 15 min long break
+        - Functions: Start, Pause, Reset, Auto-switch between modes
+        - Session counter with visual progress indicator
+        - Notifications: Sound + popup + character animation
+        - Persistence via LocalStorage
+        - Performance: Minimal CPU, accurate timing, no drift
+
+    workflow.txt
+        The animated user journey describing what happens visually at each step:
+        Step 1: Welcome & page load animations
+        Step 2: Starting a study session (button pop, background change)
+        Step 3: Pausing (grayed timer, mascot waits)
+        Step 4: Session completion (confetti, strawberry lights up)
+        Step 5: Short break mode (tea mascot, breathing timer effect)
+        Step 6: Long break after 4 sessions (mega celebration, pajamas)
+
+
+--- CORE APPLICATION FILES (in src/) ---
+
+    src/index.html
+        The main HTML file. Layout structure:
+        - Top bar with kitty_head.png icon and "Hello Kitty Study Timer" title
+        - Floating stars background container (#starsContainer)
+        - Timer card (pill-shaped) with:
+            - Session info text (#sessionText) — "Focus Session: 1 / 4"
+            - Large time display (#timeText) — "25:00"
+            - SVG pill-shaped progress ring (#progressRect)
+        - Mascot image (#mascotImage) positioned overlapping the timer card
+        - Control buttons: Pause, Reset, Start
+        - Strawberry tracker (4x strawberry emoji images)
+        - External dependency: canvas-confetti CDN library
+
+    src/css/styles.css
+        All styling for the application. Key sections:
+        - CSS variables: --top-bar-bg, --bg-grad-start, --text-pink-time, etc.
+        - Body background: linear gradient from #FFDDE6 to #FFF5F7
+        - Mode-specific backgrounds:
+            body.mode-study = pink gradient
+            body.mode-short-break = green gradient
+            body.mode-long-break = purple gradient
+        - Timer card: 500x240px, border-radius 120px (pill shape), white bg
+        - Timer text: 6.5rem, font-weight 900, color #F48BAC
+        - Mascot image: absolute positioned, right: -75px, height: 180px
+        - Buttons: 3 color classes (btn-pink, btn-blue, btn-gray)
+        - Strawberry tracker: Horizontal bar with connecting line
+        - Keyframe animations:
+            @keyframes float          — mascot bobbing up/down
+            @keyframes float-slow     — slower bob for break mode
+            @keyframes float-star     — background star twinkling
+
+    src/js/script.js
+        The complete application logic. Key architecture:
+
+        CONFIG object:
+            STUDY_TIME = 1500 seconds (25 min)
+            SHORT_BREAK = 300 seconds (5 min)
+            LONG_BREAK = 900 seconds (15 min)
+            SESSIONS_BEFORE_LONG_BREAK = 4
+
+        MODES enum:
+            STUDY, SHORT_BREAK, LONG_BREAK
+
+        State object:
+            timer (interval ID), timeLeft, isActive, currentMode, sessionCount
+
+        Key functions:
+            init()                  — Load state, render, create stars, bind events
+            startTimer()            — Starts setInterval, updates buttons
+            pauseTimer()            — Clears interval, updates buttons
+            resetTimer()            — Pauses + resets to STUDY mode
+            handleSessionEnd()      — Increments sessions, triggers confetti, switches modes
+            setMode(mode)           — Switches mode (STUDY/SHORT_BREAK/LONG_BREAK),
+                                      updates timer, mascot image, session text, body class
+            updateDisplay()         — Formats MM:SS, updates title bar, sets progress ring
+            updateStrawberryTracker()— Highlights/dims the 4 strawberry icons
+            triggerConfetti()        — Burst of pink/white confetti from both sides
+            playButtonSound()        — Plays the imported buttonClickSound.mp3 on button interaction
+            playNotificationSound() — Web Audio API sine wave chime (A5 → A6)
+            createStars()           — Generates 12 floating CSS stars (yellow, purple, green)
+            setProgress(percent)    — Updates SVG rect strokeDashoffset for progress ring
+            setupSVGProgress()      — Calculates total SVG path length via getTotalLength()
+
+        Debug tool:
+            window.fastForward()    — Sets timeLeft to 2 seconds (for testing without waiting)
+
+        Persistence:
+            saveState()             — Saves sessionCount to localStorage key "kittyTimerState"
+            loadState()             — Reads sessionCount from localStorage on page load
+
+        IMAGE PATHS USED IN JS (important for any new agent):
+            "assets/images/kitty_study.png"  — used in setMode(MODES.STUDY)
+            "assets/images/kitty_tea.png"    — used in setMode(MODES.SHORT_BREAK & LONG_BREAK)
+            "assets/sounds/buttonClickSound.mp3" — used in playButtonSound()
+
+        KNOWN BUG FIXED:
+            The mascot image className must ALWAYS include "mascot-image" as a base class.
+            Previously, setMode() was overwriting className to just "mascot-idle" or "mascot-tea",
+            which removed the positioning class and caused the layout to distort on Reset.
+            Fix: className is now set to "mascot-image mascot-idle" or "mascot-image mascot-tea".
+
+
+--- GITHUB PAGES DEPLOYMENT (docs/) ---
+
+    docs/ is an exact mirror of src/.
+    GitHub Pages is configured to serve from the /docs folder on the "main" branch.
+    The deploy URL pattern is: https://<username>.github.io/HelloKitty/
+
+    IMPORTANT: If files are updated in src/, they must be manually copied to docs/.
+    There is no automated build pipeline. The two folders should stay in sync.
+
+
+--- PROGRESSIVE WEB APP (pwa/) ---
+
+    pwa/ is a copy of src/ enhanced with PWA capabilities for Android installability.
+
+    pwa/index.html (differs from src/index.html):
+        - Added: <meta name="theme-color" content="#FFB6C1">
+        - Added: <meta name="apple-mobile-web-app-capable" content="yes">
+        - Added: <link rel="manifest" href="manifest.json">
+        - Added: Service worker registration script at the bottom
+        - Added: user-scalable=no in viewport meta
+
+    pwa/manifest.json:
+        - name: "Hello Kitty Study Timer"
+        - short_name: "Kitty Timer"
+        - display: "standalone" (hides browser chrome)
+        - background_color: "#FFF5F7"
+        - theme_color: "#FFB6C1"
+        - orientation: "portrait"
+        - icon: assets/icons/icon-512.png (512x512, any maskable)
+
+    pwa/service-worker.js:
+        - Cache name: "kitty-timer-v1"
+        - Strategy: Cache-first with network fallback
+        - Caches: All HTML, CSS, JS, images, manifest, Google Fonts URL, confetti CDN
+        - Handles offline navigation by returning cached /index.html
+        - Cleans up old caches on activate
+
+    pwa/assets/icons/icon-512.png:
+        - AI-generated app icon: Hello Kitty face on pink gradient background
+        - Used as the Android home screen icon when installed as PWA
+
+
+--- SHAREABLE SINGLE-FILE APP ---
+
+    KittyTimer.html (887 KB):
+        A completely self-contained HTML file with ALL assets inlined:
+        - CSS is embedded in a <style> tag
+        - JavaScript is embedded in a <script> tag
+        - All 3 mascot images and the button click MP3 are base64-encoded inline as data: URIs
+        - Can be sent over WhatsApp, email, Bluetooth, etc.
+        - Opens in any browser on any device
+        - Only external dependency: Google Fonts (Nunito) and confetti CDN
+
+    pwa/build-single-file.ps1:
+        PowerShell script that regenerates KittyTimer.html.
+        If src/ files are updated, re-run this script to regenerate the single file:
+            powershell -ExecutionPolicy Bypass -File "pwa\build-single-file.ps1"
+
+
+4. EXTERNAL DEPENDENCIES
+================================================================================
+
+    Google Fonts — Nunito (weights 400, 600, 700, 800, 900)
+        CDN: https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900
+
+    canvas-confetti v1.6.0
+        CDN: https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js
+        Used for: Celebration burst when a study session ends
+
+    No npm packages. No build tools. No bundlers. Pure vanilla.
+
+
+5. COLOR PALETTE QUICK REFERENCE
+================================================================================
+
+    Top Bar Background  :  #FFAEC2
+    Page Gradient Start :  #FFDDE6
+    Page Gradient End   :  #FFF5F7 (Light Cream)
+    Timer Text          :  #F48BAC (Pastel Pink)
+    Session Info Text   :  #664A4A (Brown)
+    Pink Button         :  #FFA3BA
+    Blue Button         :  #A3D1FF
+    Gray Button         :  #D1D1D1
+    Progress Track      :  #FFDFE6
+    Progress Fill       :  #FF9EBB
+    Short Break BG      :  #E8F5E9 (Soft green gradient)
+    Long Break BG       :  #E1BEE7 (Soft purple gradient)
+
+
+6. HOW TO RUN LOCALLY
+================================================================================
+
+    Option A — From src/ or docs/:
+        cd d:\Projects\HelloKitty\src
+        python -m http.server 8000
+        → Open http://localhost:8000/index.html
+
+    Option B — Single file:
+        Just double-click KittyTimer.html in any browser.
+
+    Debug tip:
+        After clicking Start, open browser console (F12) and run:
+            fastForward()
+        This skips the timer to 2 seconds for quick testing.
+
+
+7. HOW TO DEPLOY
+================================================================================
+
+    GitHub Pages:
+        1. git push -u origin main
+        2. GitHub → Settings → Pages → Source: main branch, /docs folder
+        3. Live at: https://<username>.github.io/HelloKitty/
+
+    PWA on Android:
+        1. Host the pwa/ folder on any HTTPS server
+        2. Open the URL in Chrome on Android
+        3. Tap "Install" or "Add to Home Screen"
+
+    Share via WhatsApp:
+        1. Send KittyTimer.html as a document attachment
+        2. Recipient opens it in browser — works immediately
+
+
+8. IMPORTANT NOTES FOR NEW AGENTS
+================================================================================
+
+    • src/ is the primary development folder. Edit files here first.
+    • docs/ is the GitHub Pages deployment copy — must be manually synced from src/.
+    • pwa/ is the PWA-enhanced copy — has extra manifest & service worker.
+    • KittyTimer.html is auto-generated — do NOT edit directly. Instead, edit src/
+      and re-run pwa/build-single-file.ps1 to regenerate it.
+
+    • The mascot image element MUST always have "mascot-image" in its className.
+      This was a previously fixed bug. See script.js setMode() function.
+
+    • The app uses setInterval for timing. Timer drift is minimal for a Pomodoro timer
+      but is not drift-corrected. If ultra-precise timing is needed in the future,
+      consider switching to a requestAnimationFrame + Date.now() approach.
+
+    • LocalStorage key used: "kittyTimerState" — stores { sessionCount: number }
+
+    • All images were AI-generated using the generate_image tool during development.
+      They are 2D flat vector style PNGs depicting Hello Kitty in various poses.
+
+================================================================================
+                              END OF DOCUMENT
+================================================================================
