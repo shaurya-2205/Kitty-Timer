@@ -1,0 +1,30 @@
+{
+  "name": "hellokitty",
+  "version": "1.0.0",
+  "description": "A super cute, cozy, and stress-free Pomodoro study timer with a Hello Kitty aesthetic!",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shaurya-2205/Kitty-Timer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/shaurya-2205/Kitty-Timer/issues"
+  },
+  "homepage": "https://github.com/shaurya-2205/Kitty-Timer#readme",
+  "devDependencies": {
+    "vite": "^7.3.1",
+    "vite-plugin-singlefile": "^2.3.0"
+  }
+}

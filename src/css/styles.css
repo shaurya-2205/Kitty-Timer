@@ -72,6 +72,24 @@ body.mode-long-break { background: linear-gradient(180deg, #E1BEE7 0%, #F3E5F5 1
     letter-spacing: 1px;
 }
 
+/* ── Page toggle system ── */
+.page {
+    display: none;
+    width: 100%;
+    flex: 1;
+}
+
+.page.active {
+    display: flex;
+}
+
+#page-timer.active {
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ─────────────────────────── */
+
 .app-main {
     flex: 1;
     display: flex;
@@ -82,7 +100,6 @@ body.mode-long-break { background: linear-gradient(180deg, #E1BEE7 0%, #F3E5F5 1
     position: relative;
     z-index: 5;
     gap: 1.5rem;
-    margin-top: -30px; /* Offset to center slightly above absolute vertical mid */
 }
 
 .timer-wrapper {
@@ -287,4 +304,17 @@ body.mode-long-break { background: linear-gradient(180deg, #E1BEE7 0%, #F3E5F5 1
 @keyframes float-star {
     0% { transform: translateY(0px) rotate(-10deg) scale(0.8); opacity: 0.8;  }
     100% { transform: translateY(-15px) rotate(15deg) scale(1.2); opacity: 1; }
+}
+
+/* ── Back button ── */
+.back-btn {
+    font-size: 1rem;
+    padding: 7px 22px;
+    margin-top: -4px;
+    opacity: 0.75;
+    transition: opacity 0.2s;
+}
+
+.back-btn:hover {
+    opacity: 1;
 }

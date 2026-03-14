@@ -1,0 +1,264 @@
+/* =====================================================
+   LANDING PAGE — Kawaii Editorial Aesthetic
+   Design: Playful Luxury | Soft Glassmorphism
+   DFII Score: 15 (Excellent)
+   ===================================================== */
+
+/* ── Page container: fills the flex-parent, centers everything ── */
+#page-landing.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    flex: 1;
+}
+
+/* ── Outer wrapper: a centered column with the mascot + cards ── */
+.landing-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 800px;
+    padding: 0 1.5rem;
+    animation: landing-entrance 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ── Mascot floats above the cards, centered ── */
+.landing-mascot-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: -28px; /* Controlled overlap onto the cards */
+    position: relative;
+    z-index: 3;
+}
+
+.landing-mascot {
+    height: 170px;
+    filter: drop-shadow(0px 12px 24px rgba(255, 100, 150, 0.25));
+    animation: float 3.5s ease-in-out infinite;
+}
+
+/* ── Cards row: always centered, wraps on small screens ── */
+.landing-cards-row {
+    display: flex;
+    gap: 1.8rem;
+    justify-content: center;
+    align-items: stretch;
+    width: 100%;
+    flex-wrap: wrap;
+    z-index: 1;
+    position: relative;
+}
+
+/* ── Individual card ── */
+.landing-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 36px;
+    padding: 2.4rem 2rem 2rem;
+    width: 280px;
+    flex: 0 0 280px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.3s ease;
+}
+
+/* Shimmer highlight stripe at the top of each card */
+.landing-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 10%;
+    right: 10%;
+    height: 3px;
+    border-radius: 0 0 6px 6px;
+    transition: opacity 0.3s ease;
+    opacity: 0.6;
+}
+
+.landing-card:hover {
+    transform: translateY(-8px) scale(1.02);
+}
+
+/* ── Pink card (Pomodoro) ── */
+.pink-card {
+    border: 2.5px solid rgba(255, 182, 193, 0.7);
+    box-shadow:
+        0 8px 32px rgba(255, 163, 186, 0.22),
+        0 2px 8px rgba(255, 163, 186, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.pink-card::before {
+    background: linear-gradient(90deg, transparent, #FFB6C1, transparent);
+}
+
+.pink-card:hover {
+    box-shadow:
+        0 18px 48px rgba(255, 163, 186, 0.38),
+        0 4px 16px rgba(255, 163, 186, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+/* ── Blue card (Custom Timer) ── */
+.white-card {
+    border: 2.5px solid rgba(163, 209, 255, 0.7);
+    box-shadow:
+        0 8px 32px rgba(163, 209, 255, 0.22),
+        0 2px 8px rgba(163, 209, 255, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.white-card::before {
+    background: linear-gradient(90deg, transparent, #A3D1FF, transparent);
+}
+
+.white-card:hover {
+    box-shadow:
+        0 18px 48px rgba(163, 209, 255, 0.38),
+        0 4px 16px rgba(163, 209, 255, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+/* ── Card title ── */
+.landing-card-title {
+    color: #5a3a3a;
+    font-size: 1.35rem;
+    font-weight: 900;
+    letter-spacing: -0.01em;
+    margin: 0;
+    line-height: 1.2;
+}
+
+/* ── Card body content ── */
+.landing-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.7rem;
+    flex: 1;
+}
+
+.landing-emoji {
+    font-size: 3.2rem;
+    line-height: 1;
+    animation: emoji-bounce 2.5s ease-in-out infinite;
+}
+
+/* Stagger the emoji animation between cards */
+.white-card .landing-emoji {
+    animation-delay: 0.6s;
+}
+
+.landing-card-content p {
+    color: #7a5050;
+    font-size: 1rem;
+    margin: 0;
+    font-weight: 700;
+    line-height: 1.5;
+}
+
+/* ── Landing Buttons ── */
+.btn-pink-landing {
+    background: linear-gradient(135deg, #FF9DB8 0%, #FFA3BA 100%);
+    color: white;
+    box-shadow: 0 6px 20px rgba(255, 163, 186, 0.55);
+    width: 100%;
+    letter-spacing: 0.02em;
+    border: 3px solid rgba(255, 255, 255, 0.7);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-pink-landing:hover {
+    background: linear-gradient(135deg, #FF87A8 0%, #FF8FB0 100%);
+    box-shadow: 0 10px 28px rgba(255, 130, 170, 0.65);
+    transform: translateY(-2px);
+}
+
+.btn-pink-landing:active {
+    transform: translateY(1px);
+    box-shadow: 0 4px 12px rgba(255, 163, 186, 0.4);
+}
+
+.btn-blue-landing {
+    background: linear-gradient(135deg, #8EC8FF 0%, #A3D1FF 100%);
+    color: white;
+    box-shadow: 0 6px 20px rgba(163, 209, 255, 0.55);
+    width: 100%;
+    letter-spacing: 0.02em;
+    border: 3px solid rgba(255, 255, 255, 0.7);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-blue-landing:hover {
+    background: linear-gradient(135deg, #78BAFF 0%, #8EC8FF 100%);
+    box-shadow: 0 10px 28px rgba(100, 180, 255, 0.6);
+    transform: translateY(-2px);
+}
+
+.btn-blue-landing:active {
+    transform: translateY(1px);
+    box-shadow: 0 4px 12px rgba(163, 209, 255, 0.4);
+}
+
+/* ── Page Toggle System ── */
+.page {
+    display: none;
+    width: 100%;
+}
+
+.page.active {
+    display: flex;
+}
+
+#page-timer.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ── Entrance Animation ── */
+@keyframes landing-entrance {
+    from {
+        opacity: 0;
+        transform: translateY(28px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ── Emoji Bounce (subtle, charming) ── */
+@keyframes emoji-bounce {
+    0%, 100% { transform: translateY(0) rotate(-2deg); }
+    50%       { transform: translateY(-6px) rotate(2deg); }
+}
+
+/* ── Responsive: stack cards on narrow screens ── */
+@media (max-width: 640px) {
+    .landing-card {
+        width: 100%;
+        flex: 0 0 100%;
+        max-width: 340px;
+    }
+
+    .landing-cards-row {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .landing-mascot {
+        height: 140px;
+    }
+}
