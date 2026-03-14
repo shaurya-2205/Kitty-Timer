@@ -37,6 +37,14 @@ const el = {
     body: document.body
 };
 
+// --- Asset URLs (resolved by Vite from HTML — safe in production) ---
+// Vite transforms src attributes in index.html to hashed URLs at build time.
+// Capturing them here means JS never needs a hardcoded path.
+const ASSETS = {
+    kittyStudy: null, // set in init() after DOM is ready
+    kittyTea: null,
+};
+
 // --- Progress Setup ---
 let SVGRectLength = 0;
 
@@ -54,6 +62,17 @@ function setProgress(percent) {
 
 // --- Initialization ---
 function init() {
+    // Cache the Vite-resolved URLs from the img element Vite already transformed
+    // in index.html. These are the real hashed paths that work in production.
+    ASSETS.kittyStudy = el.mascotImage.src; // initial src set in HTML = kitty_study
+
+    // Derive the kitty_tea URL from the kitty_study URL (same folder, same hash pattern)
+    // We do this by loading a temporary Image so Vite's import meta can be used,
+    // OR we simply use a data attribute on a hidden img in the HTML.
+    // Simplest: read from a hidden <img> tag we'll add to index.html.
+    const teaRef = document.getElementById('mascotTeaRef');
+    ASSETS.kittyTea = teaRef ? teaRef.src : ASSETS.kittyStudy;
+
     setupSVGProgress();
     loadState();
     updateDisplay();
@@ -181,19 +200,19 @@ function setMode(newMode) {
         case MODES.STUDY:
             state.timeLeft = CONFIG.STUDY_TIME;
             el.sessionText.textContent = `Focus Session: ${(state.sessionCount % 4) + 1} / 4`;
-            el.mascotImage.src = "assets/images/kitty_study.png";
+            el.mascotImage.src = ASSETS.kittyStudy; // Use Vite-resolved URL
             el.mascotImage.className = "mascot-image mascot-idle";
             break;
         case MODES.SHORT_BREAK:
             state.timeLeft = CONFIG.SHORT_BREAK;
             el.sessionText.textContent = "Enjoy your break! 🍵";
-            el.mascotImage.src = "assets/images/kitty_tea.png";
+            el.mascotImage.src = ASSETS.kittyTea; // Use Vite-resolved URL
             el.mascotImage.className = "mascot-image mascot-tea";
             break;
         case MODES.LONG_BREAK:
             state.timeLeft = CONFIG.LONG_BREAK;
             el.sessionText.textContent = "Mega Rest Session! 💤";
-            el.mascotImage.src = "assets/images/kitty_tea.png";
+            el.mascotImage.src = ASSETS.kittyTea; // Use Vite-resolved URL
             el.mascotImage.className = "mascot-image mascot-tea";
             break;
     }
@@ -262,13 +281,13 @@ function triggerConfetti() {
     }
 }
 
-// --- Audio Elements ---
-const buttonSound = new Audio('assets/sounds/buttonClickSound.mp3');
-buttonSound.volume = 0.5;
-
+// --- Audio ---
+// buttonClickSound is imported and played by main.js (which has access to
+// Vite's asset pipeline). script.js delegates to the global helper.
 function playButtonSound() {
-    buttonSound.currentTime = 0;
-    buttonSound.play().catch(e => console.warn('Audio play prevented:', e));
+    if (typeof window.playButtonSoundGlobal === 'function') {
+        window.playButtonSoundGlobal();
+    }
 }
 
 function playNotificationSound() {
