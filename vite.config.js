@@ -1,12 +1,10 @@
 import { defineConfig } from 'vite';
-import { viteSingleFile } from 'vite-plugin-singlefile';
-import { resolve } from 'path';
 
 export default defineConfig({
   root: 'src',
+  base: '/',           // Custom domain — assets served from root
   build: {
-    outDir: '../docs', // For GitHub pages
+    outDir: '../docs', // GitHub Pages source folder
     emptyOutDir: true,
   },
-  plugins: [viteSingleFile()],
 });
