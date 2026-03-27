@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello Kitty Study Timer 🎀</title>
+    <meta name="description" content="A kawaii Pomodoro study timer featuring Hello Kitty. Stay focused, take cute breaks!">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script type="module" crossorigin src="/assets/index-BB78vX8b.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-EVKkZ9jb.css">
+</head>
+<body>
+    <!-- 🎀 INTRO PRELOADER (soft entry sequence) -->
+    <div class="preloader" id="preloader">
+        <div class="preloader-content">
+            <div class="preloader-dot"></div>
+            <div class="preloader-dot"></div>
+            <div class="preloader-dot"></div>
+        </div>
+    </div>
+
+    <!-- ── Shared Top Bar ── -->
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <img src="/assets/kitty_head-DKEEkkea.png" alt="Hello Kitty icon" class="header-icon">
+            <h1 class="header-title">Hello Kitty Study Timer</h1>
+        </div>
+    </div>
+
+    <!-- ── Floating Background Decor (timer page only) ── -->
+    <div class="bg-decor motif-decor" id="starsContainer"></div>
+
+    <!-- ═══════════════════════════════════════════
+         PAGE: LANDING
+    ═══════════════════════════════════════════ -->
+    <div id="page-landing" class="page">
+        <div class="landing-container">
+
+            <!-- Mascot floats above the cards with entrance animation -->
+            <div class="landing-mascot-wrapper">
+                <img src="/assets/kitty_study-DXwmggSF.png" alt="Hello Kitty mascot" class="landing-mascot">
+            </div>
+
+            <!-- Mode selection cards -->
+            <div class="landing-cards-row">
+
+                <!-- Pomodoro card -->
+                <div class="landing-card pink-card">
+                    <h2 class="landing-card-title">Pomodoro Timer</h2>
+                    <div class="landing-card-content">
+                        <span class="landing-emoji">🍓</span>
+                        <p>25 min focus · 5 min break<br>4 sessions → long rest</p>
+                    </div>
+                    <button id="btn-pomodoro" class="btn btn-pink-landing">Let's Study!</button>
+                </div>
+
+                <!-- Custom timer card -->
+                <div class="landing-card white-card">
+                    <h2 class="landing-card-title">Custom Timer</h2>
+                    <div class="landing-card-content">
+                        <span class="landing-emoji">⏰</span>
+                        <p>Set your own focus &amp;<br>break durations</p>
+                    </div>
+                    <button id="btn-custom" class="btn btn-blue-landing">Coming Soon!</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         PAGE: TIMER
+    ═══════════════════════════════════════════ -->
+    <div id="page-timer" class="page">
+        <main class="app-main">
+            <div class="timer-wrapper">
+                <div class="timer-card" id="timerCard">
+                    <div class="session-info" id="sessionText">Focus Session: 1 / 4</div>
+                    
+                    <!-- 🎯 TIME DISPLAY: Wrapped in spans for staggered digit animations -->
+                    <div class="time-display" id="timeText">
+                        <span class="time-digit">2</span><span class="time-digit">5</span><span class="time-colon">:</span><span class="time-digit">0</span><span class="time-digit">0</span>
+                    </div>
+
+                    <!-- SVG Pill Progress Bar -->
+                    <svg class="progress-svg" viewBox="0 0 500 240" aria-hidden="true">
+                        <rect x="10" y="10" width="480" height="220" rx="110" ry="110" class="progress-track"/>
+                        <rect x="10" y="10" width="480" height="220" rx="110" ry="110" class="progress-fill" id="progressRect"/>
+                    </svg>
+                </div>
+
+                <!-- 🐱 CHARACTER: Overlapping the card with state-based animations -->
+                <!-- data-state: "idle" | "breathing" | "bounce" | "celebrate" -->
+                <img id="mascotImage" src="/assets/kitty_study-DXwmggSF.png" alt="Hello Kitty mascot" class="mascot-image mascot-idle" data-state="idle">
+                <!-- Hidden reference: Vite transforms this src to the hashed URL; script.js reads it -->
+                <img id="mascotTeaRef" src="/assets/kitty_tea-DKx-tdqi.png" alt="" aria-hidden="true" style="display:none">
+            </div>
+
+            <!-- 🎮 CONTROLS: Enhanced with micro-interactions -->
+            <div class="controls-row">
+                <button id="pauseBtn" class="btn btn-gray disabled-btn" disabled data-interactive="true">Pause</button>
+                <button id="resetBtn" class="btn btn-blue" data-interactive="true">Reset</button>
+                <button id="startBtn" class="btn btn-pink" data-interactive="true">Start</button>
+            </div>
+
+            <!-- 🍓 STRAWBERRY SESSION TRACKER: With visual depth -->
+            <div class="tracker-box">
+                <div class="tracker-bg-line"></div>
+                <div class="strawberry-container" id="tracker">
+                    <div class="strawberry-wrap"><img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍓</text></svg>" class="strawberry empty" alt="🍓"></div>
+                    <div class="strawberry-wrap"><img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍓</text></svg>" class="strawberry empty" alt="🍓"></div>
+                    <div class="strawberry-wrap"><img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍓</text></svg>" class="strawberry empty" alt="🍓"></div>
+                    <div class="strawberry-wrap"><img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍓</text></svg>" class="strawberry empty" alt="🍓"></div>
+                </div>
+            </div>
+
+            <!-- Back button -->
+            <button class="btn btn-gray back-btn" id="backBtn">← Back</button>
+        </main>
+    </div>
+
+    <!-- Entry point (Vite will resolve this) -->
+</body>
+</html>

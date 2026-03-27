@@ -1,0 +1,185 @@
+# Project Documentation
+
+## 1. Project Overview
+- Project name: hellokitty. [Verified]
+- What it does: A browser-based Pomodoro-style study timer with a landing view, timer view, session progression (focus and break modes), mascot-driven UI states, and lightweight audio/visual feedback. [Verified]
+- Intended purpose: Help users run timed focus sessions with clear mode transitions and a playful, calming interface. [Verified]
+- Target user: Students or anyone using simple timed focus sessions. [Inferred]
+
+## 2. Core Features
+Implemented features:
+- Focus mode duration 25 minutes, short break 5 minutes, long break 15 minutes after 4 completed focus sessions. [Verified]
+- Start, Pause, Reset controls with dynamic button enabled/disabled mapping. [Verified]
+- Progress visualization using SVG stroke offset. [Verified]
+- Session tracker with four strawberry markers. [Verified]
+- Two-page flow (landing and timer) in one HTML document. [Verified]
+- Mascot visual states: idle, running/bounce, tea (break), celebrate. [Verified]
+- Preloader on entry and decorative floating motif elements. [Verified]
+- Web Audio notification chime and button click sound. [Verified]
+- Confetti celebration when a focus session completes. [Verified]
+- Debug helper exposed in browser console: fastForward(). [Verified]
+
+Incomplete or placeholder features:
+- Custom timer button exists but shows "Coming Soon" alert; no custom duration workflow implemented. [Verified]
+
+## 3. Tech Stack
+- Languages: HTML, CSS, JavaScript. [Verified]
+- Build/dev tooling: Vite 7.x. [Verified]
+- Frontend architecture: Single-page, DOM-driven, no framework (vanilla JS). [Verified]
+- Libraries:
+  - canvas-confetti loaded by CDN in HTML. [Verified]
+  - vite-plugin-singlefile is present in dependencies but not referenced in vite.config.js. [Verified]
+- Backend/API/database: None found. [Verified]
+
+## 4. Project Structure
+- package.json: Scripts and dependencies. [Verified]
+- vite.config.js: Uses src as Vite root; outputs build to dist at repository root. [Verified]
+- src/index.html: Contains both landing and timer views plus shared top bar and preloader markup. [Verified]
+- src/main.js: App entry; imports CSS/JS, handles page navigation and button click audio helper. [Verified]
+- src/js/script.js: Core timer logic, mode transitions, UI updates, mascot state logic, confetti/audio/decor creation. [Verified]
+- src/css/styles.css: Main UI styles for timer page and shared styling; also contains landing overrides and motif styling. [Verified]
+- src/css/landing.css: Additional landing-specific styling and animations; overlaps some selectors defined in styles.css. [Verified]
+- public/CNAME: Custom domain for Pages deployment. [Verified]
+- .github/workflows/deploy.yml: CI workflow to build and deploy to GitHub Pages. [Verified]
+
+## 5. How It Works
+User flow:
+1. App starts on landing page (navigateTo("landing") in main.js). [Verified]
+2. User clicks "Let's Study!" to switch to timer page. [Verified]
+3. Start begins interval countdown; Pause stops interval; Reset returns to study mode. [Verified]
+4. On timer completion:
+   - If in focus mode: increment sessionCount, update strawberries, trigger confetti, switch to short/long break.
+   - If in break mode: return to focus mode (long break also resets sessionCount). [Verified]
+
+State/data flow:
+- Runtime state is stored in a single state object (timer handle, timeLeft, mode, isActive, sessionCount). [Verified]
+- UI is updated from state through updateDisplay(), updateButtonsState(), updateStrawberryTracker(), updateMascotState(). [Verified]
+- localStorage key kittyTimerState is written from saveState(), but current load behavior intentionally resets sessionCount to 0 on page load. [Verified]
+
+Styling flow:
+- Body class mode-study / mode-short-break / mode-long-break controls global background theme. [Verified]
+- Mascot visual state class is toggled by JS; CSS defines base continuous motion and state modifiers. [Verified]
+
+## 6. Setup and Run Instructions
+Prerequisites:
+- Node.js 20+ recommended (CI uses Node 20). [Verified]
+- npm. [Verified]
+
+Install:
+```bash
+npm install
+```
+
+Run development server:
+```bash
+npm run dev
+```
+
+Build production assets:
+```bash
+npm run build
+```
+
+Preview production build:
+```bash
+npm run preview
+```
+
+Environment/config requirements:
+- No .env file or runtime environment variables required for local execution. [Verified]
+
+## 7. Configuration
+Primary config files:
+- package.json
+  - scripts: dev, build, preview. [Verified]
+  - type is set to commonjs, while source code uses browser ESM imports under Vite build context. [Verified]
+- vite.config.js
+  - root: src
+  - base: /
+  - build.outDir: ../dist
+  - build.emptyOutDir: true [Verified]
+- GitHub Pages workflow deploy.yml
+  - runs npm ci and npm run build, then uploads artifact from docs directory. [Verified]
+
+Important constants/settings in code:
+- CONFIG in script.js:
+  - STUDY_TIME 1500 seconds
+  - SHORT_BREAK 300 seconds
+  - LONG_BREAK 900 seconds
+  - SESSIONS_BEFORE_LONG_BREAK 4 [Verified]
+
+## 8. Key Components / Modules
+- src/main.js
+  - Bootstraps navigation and shared button audio playback.
+  - Owns navigateTo function and landing/timer view toggling. [Verified]
+
+- src/js/script.js
+  - init(): initializes assets, progress path, state, listeners, preloader cleanup.
+  - startTimer()/pauseTimer()/resetTimer(): core control actions.
+  - handleSessionEnd(): mode progression and side effects.
+  - setMode(): mode switch, body class update, session text update, mascot source swap.
+  - renderTimeDisplay()/updateDisplay(): stable timer rendering and progress updates.
+  - updateMascotState()/celebrateMascotBriefly(): mascot motion state control.
+  - createStars(): creates sparse decorative motif nodes.
+  - playNotificationSound()/playButtonSound(): audio feedback. [Verified]
+
+- src/index.html
+  - Contains fixed IDs used as JS hooks. [Verified]
+
+- src/css/styles.css + src/css/landing.css
+  - Combined visual system; both files style landing page, so precedence/order matters. [Verified]
+
+## 9. Architecture Notes
+- Architectural style: Single-document UI with two logical pages toggled via CSS classes; no router, no framework state manager. [Verified]
+- Separation of concerns:
+  - main.js handles app shell navigation and entry imports.
+  - script.js handles timer domain logic and UI state sync.
+  - CSS split between global/timer style file and landing-specific file. [Verified]
+- Pattern used:
+  - Central mutable state object plus explicit render/update functions. [Verified]
+
+## 10. Known Gaps / Risks / TODOs
+- Deploy artifact mismatch risk:
+  - Vite outputs to dist, but workflow uploads docs. This can cause stale/empty deployments. [Verified]
+- Documentation drift:
+  - README references docs structure and Python static server flow that does not match current Vite root/src/dist setup. [Verified]
+- localStorage behavior inconsistency:
+  - README suggests persistence across refresh, but current loadState() resets sessionCount to 0 on each page load. [Verified]
+- Styling maintainability risk:
+  - landing styles are split and overlapping between styles.css and landing.css, increasing cascade conflicts. [Verified]
+- Custom timer path unfinished:
+  - UI button present with placeholder alert only. [Verified]
+
+## 11. Suggested Improvements
+High priority:
+1. Align CI deploy artifact path with actual Vite output (dist) or change Vite outDir to docs. [Verified]
+2. Update README to match current architecture, scripts, and behavior. [Verified]
+3. Decide and document intended sessionCount persistence policy (persist vs reset) and keep code/docs consistent. [Verified]
+
+Medium priority:
+4. Consolidate landing styles into one file or define strict layering conventions to reduce override fragility. [Inferred]
+5. Add lightweight automated checks for build and key UI behavior (basic smoke tests). [Inferred]
+6. Implement or remove the Custom Timer CTA to avoid dead-end UX. [Verified]
+
+## 12. Maintenance Notes
+- Before editing timer behavior, review these functions together: startTimer, pauseTimer, resetTimer, handleSessionEnd, setMode, updateDisplay. [Verified]
+- Preserve required DOM IDs in index.html; many JS selectors depend on them directly. [Verified]
+- Be careful with class rewrites on mascotImage; state classes control animation continuity. [Verified]
+- If changing page-level background behavior, verify body mode classes and navigation interactions in both main.js and script.js. [Verified]
+- If changing deployment config, validate both local build output path and workflow artifact path. [Verified]
+
+## 13. Documentation Classification (Diataxis Mapping)
+- Reference:
+  - Sections 3, 4, 7, 8 (stack, structure, configs, module responsibilities).
+- Explanation:
+  - Sections 5 and 9 (flow and architecture rationale).
+- How-to:
+  - Section 6 (setup/run/build commands).
+- Tutorial:
+  - Partial coverage only via setup/run path; no guided beginner walkthrough with checkpoints. [Inferred]
+
+---
+Status labels used:
+- Verified: directly confirmed from code/config.
+- Inferred: likely based on implementation signals but not explicitly declared.
+- Unknown / Needs confirmation: not enough evidence in repository.
