@@ -1,84 +1,92 @@
 # 🎀 Kitty-Timer
 
-A polished, pixel-perfect Pomodoro timer with a cozy Hello Kitty aesthetic. Stay focused, track progress, and take breaks—with style.
+A soft, Hello Kitty-inspired focus timer designed to make study sessions feel calmer, cuter, and more intentional.
 
-## ✨ Features
+Kitty-Timer combines a polished themed landing experience with a functional Pomodoro workflow, custom timer setup, session tracking, and playful UI details that make the app feel more like a tiny product than a basic stopwatch.
 
-- **Landing Page** — Welcoming intro with adorable mascot and smooth transitions
-- **Classic Pomodoro Timer** — 25-min focus / 5-min break / 15-min long break cycles
-- **Custom Timer** — Create your own work/break durations
-- **Session Tracker** — Visual progress indicator showing your streak
-- **Mascot Interactions** — Hover animations and floating cloud whispers
-- **Smooth Transitions** — Refined page navigation with subtle motion
-- **Persistent Sessions** — LocalStorage saves your progress across page refreshes
-- **Audio Notifications** — Gentle chime when sessions complete
-- **Reduced-Motion Support** — Respects OS accessibility preferences
+## ✨ Highlights
 
-## 🎮 App Flow
+* **Polished Landing Experience** — Branded intro screen with themed visuals, floating background motifs, and subtle hover interactions
+* **Pomodoro Timer** — Built-in focus / short break / long break cycle
+* **Custom Timer Setup** — Define your own focus and break durations
+* **Session Tracking** — Visual tracker for completed focus sessions
+* **Mascot UI Polish** — Character state changes, hover details, and small interaction moments
+* **Smooth Page Transitions** — Soft animated transitions between app views
+* **Accessibility-Friendly Motion** — Reduced-motion support for users who prefer minimal animation
+* **Vite-Based Setup** — Fast local development and clean production builds
 
-```
+## 🧭 App Flow
+
+```text
 Landing Page
-    ↓ (Start)
-Timer Page (Active Session)
-    ↓ (Customize)
-Custom Setup (Define work/break durations)
-    ↓
-Back to Timer
-    ↓ (Complete sessions)
-Progress tracked & saved
+   → Pomodoro Timer
+   → Custom Timer Setup
+   → Active Timer Session
+   → Session Progress Tracking
 ```
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: Vanilla JavaScript (no frameworks)
-- **Build Tool**: Vite
-- **Styling**: CSS with custom properties & keyframe animations
-- **Storage**: LocalStorage for session persistence
-- **Deployment**: GitHub Pages
+* **Frontend:** HTML, CSS, Vanilla JavaScript
+* **Build Tool:** Vite
+* **State Persistence:** LocalStorage
+* **Deployment:** GitHub Pages
 
-## 🚀 Getting Started
+## 🚀 Local Setup
 
-### Prerequisites
-- Node.js 16+ and npm
+### 1. Install dependencies
 
-### Local Development
+```bash
+npm install
+```
 
-1. **Install dependencies**
-   ```bash
-   npm install
-   ```
+### 2. Start the development server
 
-2. **Run dev server** (hot reload enabled)
-   ```bash
-   npm run dev
-   ```
-   Open `http://localhost:5173` in your browser.
+```bash
+npm run dev
+```
 
-### Building for Production
+Then open:
+
+```text
+http://localhost:5173
+```
+
+## 📦 Production Build
+
+### Build
 
 ```bash
 npm run build
 ```
 
-This generates optimized bundles in the `dist/` folder, ready for deployment.
+### Preview production build locally
+
+```bash
+npm run preview
+```
+
+The final production-ready files are generated in:
+
+```text
+dist/
+```
 
 ## 📁 Project Structure
 
-```
+```text
 Kitty-Timer/
 ├── src/
-│   ├── index.html        ← App entry point
-│   ├── main.js           ← Navigation & page transitions
+│   ├── index.html
+│   ├── main.js
 │   ├── js/
-│   │   └── script.js     ← Timer logic & state
+│   │   └── script.js
 │   ├── css/
-│   │   ├── styles.css    ← Main stylesheet
-│   │   └── landing.css   ← Landing page styles
+│   │   ├── styles.css
+│   │   └── landing.css
 │   └── assets/
-│       ├── images/       ← Mascot & icons
-│       └── sounds/       ← Audio files
-├── dist/                 ← Build output (generated)
-├── public/               ← Static assets
+├── dist/
+├── public/
 ├── package.json
 ├── vite.config.js
 └── README.md
@@ -86,24 +94,18 @@ Kitty-Timer/
 
 ## 🌐 Deployment
 
-### Deploy to GitHub Pages
+This project is configured for deployment using **GitHub Pages + GitHub Actions**.
 
-1. **Configure `vite.config.js`** (already set up for `/Kitty-Timer/` base path)
+### Deploy flow
 
-2. **Push to GitHub**
-   ```bash
-   git add .
-   git commit -m "Deploy: Kitty-Timer v1"
-   git push origin main
-   ```
+```bash
+git add .
+git commit -m "Update project"
+git push origin main
+```
 
-3. **Enable GitHub Pages** in repo settings:
-   - Go to **Settings** → **Pages**
-   - Under "Build and deployment", select **GitHub Actions**
-   - Vite will auto-build and deploy on push
+On push, the GitHub Pages workflow builds the project and deploys the production output automatically.
 
-4. Your app is live at `https://<username>.github.io/Kitty-Timer/`
+## 💗 Notes
 
----
-
-**Built with care, pastel colors, and the spirit of focus.** 🍓✨
+This project was built as a themed frontend experience — not just to function well, but to feel charming, cohesive, and pleasant to use.
