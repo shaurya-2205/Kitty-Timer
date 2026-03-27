@@ -152,7 +152,40 @@ body.mode-long-break {
     background: linear-gradient(180deg, rgba(255, 174, 194, 0.9) 0%, rgba(255, 190, 206, 0.85) 100%);
     border: 1px solid rgba(255, 255, 255, 0.72);
     box-shadow: 0 8px 22px rgba(255, 160, 190, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    --glare-x: 50%;
+    --glare-y: 50%;
     animation: slide-down 0.6s var(--motion-ease-soft);
+}
+
+.top-bar-content::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 1;
+    background:
+        radial-gradient(
+            120px circle at var(--glare-x) var(--glare-y),
+            rgba(255, 255, 255, 0.30) 0%,
+            rgba(255, 255, 255, 0.15) 30%,
+            rgba(255, 255, 255, 0.05) 52%,
+            rgba(255, 255, 255, 0) 76%
+        );
+    opacity: 0;
+    transition: opacity 180ms var(--motion-ease-soft);
+}
+
+body.landing-view .top-bar-content.is-glare-hover::after {
+    opacity: 1;
+}
+
+.top-bar-content > * {
+    position: relative;
+    z-index: 2;
 }
 
 .header-icon {
@@ -751,6 +784,10 @@ body.mode-long-break {
     height: 180px;
     filter: drop-shadow(0px 10px 20px rgba(0, 0, 0, 0.1));
     will-change: transform;
+    transform: translateY(0) scale(1) rotate(0deg);
+    transition:
+        transform 240ms var(--motion-ease-soft),
+        filter 240ms var(--motion-ease-soft);
 }
 
 .landing-cards-row {
@@ -860,6 +897,11 @@ body.mode-long-break {
 }
 
 @media (hover: hover) and (pointer: fine) {
+    #page-landing.active .landing-mascot-wrapper:hover .landing-mascot {
+        transform: translateY(-4px) scale(1.018) rotate(-0.6deg);
+        filter: drop-shadow(0 14px 24px rgba(255, 120, 170, 0.22)) drop-shadow(0 1px 0 rgba(255, 255, 255, 0.78));
+    }
+
     #page-landing.active .landing-card:hover {
         transform: translateY(-5px) scale(1.01);
         box-shadow:
