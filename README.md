@@ -1,89 +1,109 @@
-# 🎀 Hello Kitty Study Timer
+# 🎀 Kitty-Timer
 
-A super cute, cozy, and stress-free Pomodoro study timer with a Hello Kitty aesthetic!
-
-![Preview](docs/assets/images/kitty_study.png)
+A polished, pixel-perfect Pomodoro timer with a cozy Hello Kitty aesthetic. Stay focused, track progress, and take breaks—with style.
 
 ## ✨ Features
 
-- 🕐 **25-minute Focus Sessions** with pastel-red theme
-- 🍵 **5-minute Short Breaks** with calming green theme
-- 💤 **15-minute Long Breaks** after 4 study sessions
-- 🍓 **Strawberry Tracker** — watch your progress fill up!
-- 🎉 **Confetti Celebration** when you finish a session
-- 🔔 **Chime Notification** via Web Audio API
-- ⭐ **Floating Star Animations** in the background
-- 💾 **LocalStorage Persistence** — your streak survives page refresh
+- **Landing Page** — Welcoming intro with adorable mascot and smooth transitions
+- **Classic Pomodoro Timer** — 25-min focus / 5-min break / 15-min long break cycles
+- **Custom Timer** — Create your own work/break durations
+- **Session Tracker** — Visual progress indicator showing your streak
+- **Mascot Interactions** — Hover animations and floating cloud whispers
+- **Smooth Transitions** — Refined page navigation with subtle motion
+- **Persistent Sessions** — LocalStorage saves your progress across page refreshes
+- **Audio Notifications** — Gentle chime when sessions complete
+- **Reduced-Motion Support** — Respects OS accessibility preferences
 
-## 🚀 Live Demo
+## 🎮 App Flow
 
-> After deploying to GitHub Pages, your app will be live at:
-> `https://<your-username>.github.io/HelloKitty/`
+```
+Landing Page
+    ↓ (Start)
+Timer Page (Active Session)
+    ↓ (Customize)
+Custom Setup (Define work/break durations)
+    ↓
+Back to Timer
+    ↓ (Complete sessions)
+Progress tracked & saved
+```
 
-## 🛠️ How to Deploy on GitHub Pages
+## 🛠️ Tech Stack
 
-1. **Push this repo** to GitHub:
+- **Frontend**: Vanilla JavaScript (no frameworks)
+- **Build Tool**: Vite
+- **Styling**: CSS with custom properties & keyframe animations
+- **Storage**: LocalStorage for session persistence
+- **Deployment**: GitHub Pages
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 16+ and npm
+
+### Local Development
+
+1. **Install dependencies**
    ```bash
-   git init
-   git add .
-   git commit -m "Initial commit: Hello Kitty Study Timer 🎀"
-   git branch -M main
-   git remote add origin https://github.com/<your-username>/HelloKitty.git
-   git push -u origin main
+   npm install
    ```
 
-2. **Enable GitHub Pages**:
-   - Go to your repo on GitHub → **Settings** → **Pages**
-   - Under **Source**, select **Deploy from a branch**
-   - Set the branch to `main` and the folder to `/docs`
-   - Click **Save**
+2. **Run dev server** (hot reload enabled)
+   ```bash
+   npm run dev
+   ```
+   Open `http://localhost:5173` in your browser.
 
-3. Your site will be live in a few minutes at `https://<your-username>.github.io/HelloKitty/`
-
-## 🧪 Testing Locally
-
-You can test locally by running a simple HTTP server:
+### Building for Production
 
 ```bash
-cd docs
-python -m http.server 8000
+npm run build
 ```
 
-Then open `http://localhost:8000` in your browser.
-
-### ⏩ Fast Forward (Debug)
-
-Don't want to wait 25 minutes? After clicking **Start**, open the browser console (`F12` → Console) and type:
-
-```js
-fastForward()
-```
-
-The timer will jump to 2 seconds remaining!
+This generates optimized bundles in the `dist/` folder, ready for deployment.
 
 ## 📁 Project Structure
 
 ```
-HelloKitty/
-├── docs/                  ← GitHub Pages serves from here
-│   ├── index.html
-│   ├── css/
-│   │   └── styles.css
+Kitty-Timer/
+├── src/
+│   ├── index.html        ← App entry point
+│   ├── main.js           ← Navigation & page transitions
 │   ├── js/
-│   │   └── script.js
+│   │   └── script.js     ← Timer logic & state
+│   ├── css/
+│   │   ├── styles.css    ← Main stylesheet
+│   │   └── landing.css   ← Landing page styles
 │   └── assets/
-│       └── images/
-│           ├── kitty_study.png
-│           ├── kitty_tea.png
-│           └── kitty_head.png
-├── src/                   ← Development source (mirrors docs/)
-├── Design Specification.txt
-├── Technical Prerequisites.txt
-├── workflow.txt
-├── README.md
-└── .gitignore
+│       ├── images/       ← Mascot & icons
+│       └── sounds/       ← Audio files
+├── dist/                 ← Build output (generated)
+├── public/               ← Static assets
+├── package.json
+├── vite.config.js
+└── README.md
 ```
 
-## 💖 Credits
+## 🌐 Deployment
 
-Built with love, pastel colors, and lots of 🍓
+### Deploy to GitHub Pages
+
+1. **Configure `vite.config.js`** (already set up for `/Kitty-Timer/` base path)
+
+2. **Push to GitHub**
+   ```bash
+   git add .
+   git commit -m "Deploy: Kitty-Timer v1"
+   git push origin main
+   ```
+
+3. **Enable GitHub Pages** in repo settings:
+   - Go to **Settings** → **Pages**
+   - Under "Build and deployment", select **GitHub Actions**
+   - Vite will auto-build and deploy on push
+
+4. Your app is live at `https://<username>.github.io/Kitty-Timer/`
+
+---
+
+**Built with care, pastel colors, and the spirit of focus.** 🍓✨

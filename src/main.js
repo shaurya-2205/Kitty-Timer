@@ -8,6 +8,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const pageTimer   = document.getElementById('page-timer');
     const pageCustom  = document.getElementById('page-custom-setup');
     const topBarContent = document.querySelector('.top-bar-content');
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const PAGE_TRANSITION_MS = 220;
+
+    let isPageTransitioning = false;
+    let queuedPageId = null;
 
     let glareRAF = null;
     let currentGlareX = 50;
@@ -55,26 +60,77 @@ document.addEventListener('DOMContentLoaded', () => {
         queueHeaderGlareAnimation();
     });
 
-    // ── Navigation ──────────────────────────────────
-    window.navigateTo = function(pageId) {
-        if (pageId === 'timer') {
-            pageLanding.classList.remove('active');
-            pageCustom.classList.remove('active');
-            pageTimer.classList.add('active');
-            document.body.classList.remove('landing-view');
-            topBarContent?.classList.remove('is-glare-hover');
-        } else if (pageId === 'custom-setup') {
-            pageLanding.classList.remove('active');
-            pageTimer.classList.remove('active');
-            pageCustom.classList.add('active');
-            document.body.classList.remove('landing-view');
-            topBarContent?.classList.remove('is-glare-hover');
-        } else {
-            pageTimer.classList.remove('active');
-            pageCustom.classList.remove('active');
-            pageLanding.classList.add('active');
+    function resolvePage(pageId) {
+        if (pageId === 'timer') return pageTimer;
+        if (pageId === 'custom-setup') return pageCustom;
+        return pageLanding;
+    }
+
+    function applyPageViewState(pageId) {
+        if (pageId === 'landing') {
             document.body.classList.add('landing-view');
+            return;
         }
+
+        document.body.classList.remove('landing-view');
+        topBarContent?.classList.remove('is-glare-hover');
+    }
+
+    function completeQueuedNavigation() {
+        if (!queuedPageId) return;
+
+        const nextQueued = queuedPageId;
+        queuedPageId = null;
+        window.navigateTo(nextQueued);
+    }
+
+    function cleanupPageTransitionClasses() {
+        pageLanding.classList.remove('page-enter', 'page-exit');
+        pageTimer.classList.remove('page-enter', 'page-exit');
+        pageCustom.classList.remove('page-enter', 'page-exit');
+    }
+
+    // ── Navigation ──────────────────────────────────
+    window.navigateTo = function(pageId, options = {}) {
+        const destination = resolvePage(pageId);
+        const current = document.querySelector('.page.active');
+        const skipAnimation = options.skipAnimation === true || prefersReducedMotion.matches;
+
+        applyPageViewState(pageId);
+
+        if (current === destination) {
+            return;
+        }
+
+        if (isPageTransitioning) {
+            queuedPageId = pageId;
+            return;
+        }
+
+        cleanupPageTransitionClasses();
+
+        if (skipAnimation) {
+            current?.classList.remove('active');
+            destination.classList.add('active');
+            return;
+        }
+
+        isPageTransitioning = true;
+
+        if (current) {
+            current.classList.add('page-exit');
+        }
+
+        setTimeout(() => {
+            current?.classList.remove('active', 'page-exit');
+            destination.classList.add('active', 'page-enter');
+
+            setTimeout(() => {
+                destination.classList.remove('page-enter');
+                isPageTransitioning = false;
+                completeQueuedNavigation();
+            }, PAGE_TRANSITION_MS);
+        }, PAGE_TRANSITION_MS);
     };
 
     // ── Landing buttons ──────────────────────────────
@@ -98,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Start on landing
-    window.navigateTo('landing');
+    window.navigateTo('landing', { skipAnimation: true });
 });
 
 // Shared audio helper (used by landing & timer)
