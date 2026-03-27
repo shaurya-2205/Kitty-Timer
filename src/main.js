@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             pageTimer.classList.remove('active');
             pageLanding.classList.add('active');
-            document.body.className = '';
         }
     };
 

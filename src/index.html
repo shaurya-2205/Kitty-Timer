@@ -11,6 +11,15 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
+    <!-- 🎀 INTRO PRELOADER (soft entry sequence) -->
+    <div class="preloader" id="preloader">
+        <div class="preloader-content">
+            <div class="preloader-dot"></div>
+            <div class="preloader-dot"></div>
+            <div class="preloader-dot"></div>
+        </div>
+    </div>
+
     <!-- ── Shared Top Bar ── -->
     <div class="top-bar">
         <div class="top-bar-content">
@@ -20,7 +29,7 @@
     </div>
 
     <!-- ── Floating Background Decor (timer page only) ── -->
-    <div class="bg-decor" id="starsContainer"></div>
+    <div class="bg-decor motif-decor" id="starsContainer"></div>
 
     <!-- ═══════════════════════════════════════════
          PAGE: LANDING
@@ -28,7 +37,7 @@
     <div id="page-landing" class="page">
         <div class="landing-container">
 
-            <!-- Mascot floats above the cards -->
+            <!-- Mascot floats above the cards with entrance animation -->
             <div class="landing-mascot-wrapper">
                 <img src="assets/images/kitty_study.png" alt="Hello Kitty mascot" class="landing-mascot">
             </div>
@@ -68,7 +77,11 @@
             <div class="timer-wrapper">
                 <div class="timer-card" id="timerCard">
                     <div class="session-info" id="sessionText">Focus Session: 1 / 4</div>
-                    <div class="time-display" id="timeText">25:00</div>
+                    
+                    <!-- 🎯 TIME DISPLAY: Wrapped in spans for staggered digit animations -->
+                    <div class="time-display" id="timeText">
+                        <span class="time-digit">2</span><span class="time-digit">5</span><span class="time-colon">:</span><span class="time-digit">0</span><span class="time-digit">0</span>
+                    </div>
 
                     <!-- SVG Pill Progress Bar -->
                     <svg class="progress-svg" viewBox="0 0 500 240" aria-hidden="true">
@@ -77,19 +90,21 @@
                     </svg>
                 </div>
 
-                <!-- Mascot overlapping the card -->
-                <img id="mascotImage" src="assets/images/kitty_study.png" alt="Hello Kitty mascot" class="mascot-image mascot-idle">
+                <!-- 🐱 CHARACTER: Overlapping the card with state-based animations -->
+                <!-- data-state: "idle" | "breathing" | "bounce" | "celebrate" -->
+                <img id="mascotImage" src="assets/images/kitty_study.png" alt="Hello Kitty mascot" class="mascot-image mascot-idle" data-state="idle">
                 <!-- Hidden reference: Vite transforms this src to the hashed URL; script.js reads it -->
                 <img id="mascotTeaRef" src="assets/images/kitty_tea.png" alt="" aria-hidden="true" style="display:none">
             </div>
 
+            <!-- 🎮 CONTROLS: Enhanced with micro-interactions -->
             <div class="controls-row">
-                <button id="pauseBtn" class="btn btn-gray disabled-btn" disabled>Pause</button>
-                <button id="resetBtn" class="btn btn-blue">Reset</button>
-                <button id="startBtn" class="btn btn-pink">Start</button>
+                <button id="pauseBtn" class="btn btn-gray disabled-btn" disabled data-interactive="true">Pause</button>
+                <button id="resetBtn" class="btn btn-blue" data-interactive="true">Reset</button>
+                <button id="startBtn" class="btn btn-pink" data-interactive="true">Start</button>
             </div>
 
-            <!-- Strawberry session tracker -->
+            <!-- 🍓 STRAWBERRY SESSION TRACKER: With visual depth -->
             <div class="tracker-box">
                 <div class="tracker-bg-line"></div>
                 <div class="strawberry-container" id="tracker">

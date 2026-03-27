@@ -34,7 +34,8 @@ const el = {
     timerCard: document.getElementById('timerCard'),
     progressRect: document.getElementById('progressRect'),
     strawberries: document.querySelectorAll('.strawberry'),
-    body: document.body
+    body: document.body,
+    preloader: document.getElementById('preloader')
 };
 
 // --- Asset URLs (resolved by Vite from HTML — safe in production) ---
@@ -75,10 +76,13 @@ function init() {
 
     setupSVGProgress();
     loadState();
+    el.body.className = `mode-${state.currentMode}`;
     updateDisplay();
     updateStrawberryTracker();
     updateButtonsState();
+    updateMascotState();
     createStars();
+    finalizePreloader();
     
     // Event Listeners
     el.startBtn.addEventListener('click', () => { playButtonSound(); startTimer(); });
@@ -97,16 +101,9 @@ function saveState() {
 }
 
 function loadState() {
-    const saved = localStorage.getItem('kittyTimerState');
-    if (saved) {
-        try {
-            const parsed = JSON.parse(saved);
-            state.sessionCount = parsed.sessionCount || 0;
-            if (state.sessionCount >= CONFIG.SESSIONS_BEFORE_LONG_BREAK) {
-                state.sessionCount = 0;
-            }
-        } catch (e) { console.error('Error loading state'); }
-    }
+    // Fresh-start behavior: do not restore previous session count on reload.
+    state.sessionCount = 0;
+    saveState();
 }
 
 // --- Timer Logic ---
@@ -115,6 +112,7 @@ function startTimer() {
     state.isActive = true;
     
     updateButtonsState();
+    updateMascotState();
     
     state.timer = setInterval(() => {
         state.timeLeft--;
@@ -132,10 +130,14 @@ function pauseTimer() {
     state.isActive = false;
     clearInterval(state.timer);
     updateButtonsState();
+    updateMascotState();
 }
 
 function resetTimer() {
     pauseTimer();
+    state.sessionCount = 0;
+    saveState();
+    updateStrawberryTracker();
     setMode(MODES.STUDY);
 }
 
@@ -181,6 +183,7 @@ function handleSessionEnd() {
         } else {
             setMode(MODES.SHORT_BREAK);
         }
+        celebrateMascotBriefly();
     } else {
         if (state.currentMode === MODES.LONG_BREAK) {
             state.sessionCount = 0;
@@ -201,32 +204,56 @@ function setMode(newMode) {
             state.timeLeft = CONFIG.STUDY_TIME;
             el.sessionText.textContent = `Focus Session: ${(state.sessionCount % 4) + 1} / 4`;
             el.mascotImage.src = ASSETS.kittyStudy; // Use Vite-resolved URL
-            el.mascotImage.className = "mascot-image mascot-idle";
             break;
         case MODES.SHORT_BREAK:
             state.timeLeft = CONFIG.SHORT_BREAK;
             el.sessionText.textContent = "Enjoy your break! 🍵";
             el.mascotImage.src = ASSETS.kittyTea; // Use Vite-resolved URL
-            el.mascotImage.className = "mascot-image mascot-tea";
             break;
         case MODES.LONG_BREAK:
             state.timeLeft = CONFIG.LONG_BREAK;
             el.sessionText.textContent = "Mega Rest Session! 💤";
             el.mascotImage.src = ASSETS.kittyTea; // Use Vite-resolved URL
-            el.mascotImage.className = "mascot-image mascot-tea";
             break;
     }
+
+    updateMascotState();
     
     updateDisplay();
 }
 
 // --- UI Updates ---
+function renderTimeDisplay(timeString) {
+    const chars = [...timeString];
+    const nodes = Array.from(el.timeText.children);
+
+    // Keep the existing span structure and only update text content per tick.
+    // This prevents re-creating nodes and replaying entrance animations.
+    if (nodes.length === chars.length) {
+        for (let i = 0; i < chars.length; i++) {
+            nodes[i].textContent = chars[i];
+        }
+        return;
+    }
+
+    const fragment = document.createDocumentFragment();
+    for (const ch of chars) {
+        const span = document.createElement('span');
+        span.className = ch === ':' ? 'time-colon' : 'time-digit';
+        span.textContent = ch;
+        fragment.appendChild(span);
+    }
+
+    el.timeText.textContent = '';
+    el.timeText.appendChild(fragment);
+}
+
 function updateDisplay() {
     const minutes = Math.floor(state.timeLeft / 60);
     const seconds = state.timeLeft % 60;
     const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     
-    el.timeText.textContent = timeString;
+    renderTimeDisplay(timeString);
     document.title = `(${timeString}) Hello Kitty Timer`;
     
     // Ensure header title is accurate as we initialize
@@ -241,6 +268,42 @@ function updateDisplay() {
     
     const percentage = ((totalTime - state.timeLeft) / totalTime) * 100;
     setProgress(Math.max(0, Math.min(100, percentage)));
+}
+
+function updateMascotState() {
+    const visualState = state.currentMode === MODES.STUDY
+        ? (state.isActive ? 'bounce' : 'idle')
+        : 'tea';
+
+    const nextClassName = `mascot-image mascot-${visualState}`;
+    const currentState = el.mascotImage.getAttribute('data-state');
+
+    // Avoid re-applying the same class/state; that would restart CSS animation timelines.
+    if (currentState === visualState && el.mascotImage.className === nextClassName) {
+        return;
+    }
+
+    el.mascotImage.className = nextClassName;
+    el.mascotImage.setAttribute('data-state', visualState);
+}
+
+function celebrateMascotBriefly() {
+    el.mascotImage.className = 'mascot-image mascot-celebrate';
+    el.mascotImage.setAttribute('data-state', 'celebrate');
+
+    setTimeout(() => {
+        updateMascotState();
+    }, 700);
+}
+
+function finalizePreloader() {
+    if (!el.preloader) return;
+
+    setTimeout(() => {
+        if (el.preloader && el.preloader.parentNode) {
+            el.preloader.parentNode.removeChild(el.preloader);
+        }
+    }, 2200);
 }
 
 function updateStrawberryTracker() {
@@ -315,13 +378,21 @@ function playNotificationSound() {
 function createStars() {
     const container = document.getElementById('starsContainer');
     const colors = ['yellow', 'purple', 'yellow', 'green', 'yellow'];
-    
-    for (let i = 0; i < 12; i++) {
+    const safeEdgeSlots = [
+        { left: [7, 15], top: [8, 16] },
+        { left: [84, 92], top: [10, 18] },
+        { left: [4, 12], top: [36, 50] },
+        { left: [88, 96], top: [38, 52] },
+        { left: [9, 17], top: [78, 88] },
+        { left: [82, 90], top: [80, 90] }
+    ];
+
+    for (let i = 0; i < safeEdgeSlots.length; i++) {
         const star = document.createElement('div');
         star.className = `star ${colors[i % colors.length]}`;
-        
-        star.style.left = `${10 + Math.random() * 80}%`;
-        star.style.top = `${10 + Math.random() * 80}%`;
+        const slot = safeEdgeSlots[i];
+        star.style.left = `${slot.left[0] + Math.random() * (slot.left[1] - slot.left[0])}%`;
+        star.style.top = `${slot.top[0] + Math.random() * (slot.top[1] - slot.top[0])}%`;
         star.style.animationDelay = `${Math.random() * 5}s`;
         
         container.appendChild(star);
