@@ -393,8 +393,12 @@ body.mode-long-break {
     --mascot-mid-scale: 1.01;
     --mascot-mid-tilt: 0deg;
     --mascot-float-duration: 4.2s;
+    animation: mascot-base-float var(--mascot-float-duration) var(--motion-ease-soft) 1.2s infinite;
+}
+
+.mascot-image.mascot-enter {
     animation:
-        mascot-entrance 0.8s var(--motion-ease-spring) 0.4s backwards,
+        mascot-entrance 0.8s var(--motion-ease-spring) 0.2s backwards,
         mascot-base-float var(--mascot-float-duration) var(--motion-ease-soft) 1.2s infinite;
 }
 
@@ -606,7 +610,9 @@ body.mode-long-break {
 
 .strawberry-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
     width: 200px;
     z-index: 2;
 }
@@ -669,9 +675,9 @@ body.mode-long-break {
     position: absolute;
     width: auto;
     height: auto;
-    animation: float-star 10s var(--motion-ease-soft) infinite;
+    animation: float-star var(--motif-duration, 10s) var(--motion-ease-soft) infinite;
     will-change: transform;
-    opacity: 0.38;
+    opacity: var(--motif-opacity-min, 0.3);
 }
 
 .star::before {
@@ -681,7 +687,7 @@ body.mode-long-break {
 .motif-decor .star::after {
     content: '⭐';
     display: block;
-    font-size: 18px;
+    font-size: var(--motif-size, 18px);
     line-height: 1;
     filter: drop-shadow(0 3px 8px rgba(255, 170, 190, 0.22));
 }
@@ -696,18 +702,14 @@ body.mode-long-break {
     font-size: 17px;
 }
 
-.motif-decor .star:nth-child(n+7) {
-    display: none;
-}
-
 @keyframes float-star {
     0% { 
         transform: translateY(0px) rotate(-3deg) scale(0.98);
-        opacity: 0.32;
+        opacity: var(--motif-opacity-min, 0.3);
     }
     100% { 
-        transform: translateY(-5px) rotate(3deg) scale(1.01);
-        opacity: 0.45;
+        transform: translateY(calc(var(--motif-drift, 5px) * -1)) rotate(var(--motif-rotate, 3deg)) scale(1.01);
+        opacity: var(--motif-opacity-max, 0.45);
     }
 }
 
@@ -901,6 +903,92 @@ body.mode-long-break {
     line-height: 1.5;
 }
 
+/* ═══════════════════════════════════════════
+   CUSTOM SETUP PAGE
+═══════════════════════════════════════════ */
+#page-custom-setup.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-setup-main {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 16px;
+}
+
+.custom-setup-card {
+    width: min(620px, 100%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(255, 250, 252, 0.94) 100%);
+    border: 2px solid rgba(255, 214, 227, 0.92);
+    border-radius: 32px;
+    padding: 22px;
+    box-shadow: 0 14px 32px rgba(255, 165, 196, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.custom-setup-title {
+    color: var(--text-brown);
+    font-size: 1.55rem;
+    font-weight: 900;
+    margin-bottom: 4px;
+}
+
+.custom-setup-subtitle {
+    color: #7a5050;
+    font-weight: 700;
+    margin-bottom: 14px;
+}
+
+.custom-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.custom-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-weight: 800;
+    color: var(--text-brown);
+}
+
+.custom-field input {
+    appearance: textfield;
+    border: 2px solid rgba(255, 214, 227, 0.95);
+    border-radius: 14px;
+    padding: 10px 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #5b4242;
+    background: rgba(255, 255, 255, 0.95);
+    outline: none;
+    transition: border-color 0.2s var(--motion-ease-soft), box-shadow 0.2s var(--motion-ease-soft);
+}
+
+.custom-field input:focus {
+    border-color: #f4a2ba;
+    box-shadow: 0 0 0 3px rgba(255, 163, 186, 0.2);
+}
+
+.custom-setup-error {
+    min-height: 24px;
+    margin-top: 10px;
+    color: #a53d5e;
+    font-weight: 800;
+    font-size: 0.95rem;
+}
+
+.custom-setup-actions {
+    margin-top: 8px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
 .btn-pink-landing,
 .btn-blue-landing {
     margin-top: auto;
@@ -951,6 +1039,15 @@ body.mode-long-break {
 
     .landing-card {
         width: 280px;
+    }
+
+    .custom-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .custom-setup-actions {
+        justify-content: center;
+        flex-wrap: wrap;
     }
 }
 

@@ -6,14 +6,21 @@ import buttonClickSound from './assets/sounds/buttonClickSound.mp3';
 document.addEventListener('DOMContentLoaded', () => {
     const pageLanding = document.getElementById('page-landing');
     const pageTimer   = document.getElementById('page-timer');
+    const pageCustom  = document.getElementById('page-custom-setup');
 
     // ── Navigation ──────────────────────────────────
     window.navigateTo = function(pageId) {
         if (pageId === 'timer') {
             pageLanding.classList.remove('active');
+            pageCustom.classList.remove('active');
             pageTimer.classList.add('active');
+        } else if (pageId === 'custom-setup') {
+            pageLanding.classList.remove('active');
+            pageTimer.classList.remove('active');
+            pageCustom.classList.add('active');
         } else {
             pageTimer.classList.remove('active');
+            pageCustom.classList.remove('active');
             pageLanding.classList.add('active');
         }
     };
@@ -21,12 +28,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // ── Landing buttons ──────────────────────────────
     document.getElementById('btn-pomodoro')?.addEventListener('click', () => {
         playButtonSoundGlobal();
+        if (typeof window.selectPomodoroProfile === 'function') {
+            window.selectPomodoroProfile();
+        }
         window.navigateTo('timer');
     });
 
     document.getElementById('btn-custom')?.addEventListener('click', () => {
         playButtonSoundGlobal();
-        alert('Custom Timer coming soon! 🎀');
+        window.navigateTo('custom-setup');
     });
 
     // ── Back button ──────────────────────────────────

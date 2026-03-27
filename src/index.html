@@ -62,11 +62,52 @@
                         <span class="landing-emoji">⏰</span>
                         <p>Set your own focus &amp;<br>break durations</p>
                     </div>
-                    <button id="btn-custom" class="btn btn-blue-landing">Coming Soon!</button>
+                    <button id="btn-custom" class="btn btn-blue-landing">Customize</button>
                 </div>
 
             </div>
         </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         PAGE: CUSTOM TIMER SETUP
+    ═══════════════════════════════════════════ -->
+    <div id="page-custom-setup" class="page">
+        <main class="custom-setup-main">
+            <section class="custom-setup-card" aria-labelledby="customSetupTitle">
+                <h2 id="customSetupTitle" class="custom-setup-title">Custom Timer Setup</h2>
+                <p class="custom-setup-subtitle">Pick your own rhythm before starting.</p>
+
+                <div class="custom-grid">
+                    <label class="custom-field" for="customFocusInput">
+                        <span>Focus (minutes)</span>
+                        <input id="customFocusInput" type="number" min="5" max="180" step="1" inputmode="numeric" />
+                    </label>
+
+                    <label class="custom-field" for="customShortBreakInput">
+                        <span>Short break (minutes)</span>
+                        <input id="customShortBreakInput" type="number" min="1" max="60" step="1" inputmode="numeric" />
+                    </label>
+
+                    <label class="custom-field" for="customLongBreakInput">
+                        <span>Long break (minutes)</span>
+                        <input id="customLongBreakInput" type="number" min="5" max="90" step="1" inputmode="numeric" />
+                    </label>
+
+                    <label class="custom-field" for="customSessionsInput">
+                        <span>Sessions before long break</span>
+                        <input id="customSessionsInput" type="number" min="2" max="6" step="1" inputmode="numeric" />
+                    </label>
+                </div>
+
+                <p id="customSetupError" class="custom-setup-error" role="alert" aria-live="polite"></p>
+
+                <div class="custom-setup-actions">
+                    <button id="customBackBtn" class="btn btn-gray">Back</button>
+                    <button id="customApplyBtn" class="btn btn-blue">Apply &amp; Go to Timer</button>
+                </div>
+            </section>
+        </main>
     </div>
 
     <!-- ═══════════════════════════════════════════
